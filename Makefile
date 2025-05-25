@@ -7,14 +7,17 @@ OUT_DIR = ./dist
 
 main: server
 
-server: $(BUILD_DIR)/main.o $(BUILD_DIR)/server.o
-	$(CC) $(FLAGS) $(BUILD_DIR)/main.o $(BUILD_DIR)/server.o -o $(OUT_DIR)/server
+server: $(BUILD_DIR)/main.o $(BUILD_DIR)/server.o $(BUILD_DIR)/conn_handler.o
+	$(CC) $(FLAGS) $(BUILD_DIR)/main.o $(BUILD_DIR)/server.o $(BUILD_DIR)/conn_handler.o -o $(OUT_DIR)/server
 
 $(BUILD_DIR)/main.o: $(SRC_DIR)/main.c
 	$(CC) $(FLAGS) -c $(SRC_DIR)/main.c -o $(BUILD_DIR)/main.o
 
 $(BUILD_DIR)/server.o: $(SRC_DIR)/server.c $(SRC_DIR)/server.h
 	$(CC) $(FLAGS) -c $(SRC_DIR)/server.c -o $(BUILD_DIR)/server.o
+
+$(BUILD_DIR)/conn_handler.o: $(SRC_DIR)/conn_handler.c $(SRC_DIR)/conn_handler.h
+	$(CC) $(FLAGS) -c $(SRC_DIR)/conn_handler.c -o $(BUILD_DIR)/conn_handler.o
 
 setup:
 	mkdir $(BUILD_DIR) $(OUT_DIR)

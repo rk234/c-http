@@ -1,7 +1,9 @@
+#include "conn_handler.h"
 #include "server.h"
 #include <bits/getopt_core.h>
 #include <netinet/in.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
@@ -23,6 +25,13 @@ int main(int argc, char *argv[]) {
                                                &client_addr_len)) != -1) {
       printf("Connection accepted!\n");
 
+      int pid = fork();
+
+      if (pid == 0) {
+        // child
+        handle_conn(client_socket_fd);
+        exit(0);
+      }
       close(client_socket_fd);
     }
   }
