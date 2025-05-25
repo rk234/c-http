@@ -20,4 +20,4 @@ setup:
 	mkdir $(BUILD_DIR) $(OUT_DIR)
 
 clean:
-	rm $(BUILD_DIR)/* server
+	rm $(BUILD_DIR)/* $(OUT_DIR)/*
