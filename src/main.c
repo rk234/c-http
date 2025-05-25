@@ -10,7 +10,7 @@
 int main(int argc, char *argv[]) {
   int socket_fd = -1;
   if ((socket_fd = server_create_socket(INADDR_ANY, 8080)) == -1) {
-    printf("Exiting...");
+    printf("Exiting...\n");
     return -1;
   }
 
@@ -29,8 +29,13 @@ int main(int argc, char *argv[]) {
 
       if (pid == 0) {
         // child
-        handle_conn(client_socket_fd);
-        exit(0);
+        if (handle_conn(client_socket_fd, (struct sockaddr_in *)&client_addr) !=
+            0) {
+          printf("[handler]: exited with error!\n");
+          return 1;
+        }
+        printf("[handler]: exited successfully\n");
+        return 0;
       }
       close(client_socket_fd);
     }
