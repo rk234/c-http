@@ -1,6 +1,7 @@
 #include "server.h"
 #include "conn_handler.h"
 #include <arpa/inet.h>
+#include <asm-generic/socket.h>
 #include <stdio.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -20,6 +21,7 @@ int server_create_socket(in_addr_t ip, uint16_t port) {
                              .sin_addr.s_addr = htonl(ip)};
 
   if (bind(sockfd, (struct sockaddr *)&addr, sizeof(addr)) != 0) {
+    close(sockfd);
     perror("failed to bind");
     return -1;
   }

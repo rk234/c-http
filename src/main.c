@@ -47,6 +47,7 @@ int main(int argc, char *argv[]) {
 
   if ((socket_fd = server_create_socket(INADDR_ANY, 8080)) == -1) {
     printf("Exiting...\n");
+
     return -1;
   }
 

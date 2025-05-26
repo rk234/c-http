@@ -1,3 +1,3 @@
 #include "response.h"
 
-void create_http_response() {}
+int create_http_response(http_resp_t res, char *buf, int buf_size) { return 0; }
