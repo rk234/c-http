@@ -77,6 +77,8 @@ int parse_http_request(char *msg, http_req_t *req) {
         req->user_agent = strdup(value);
       } else if (strcmp(header_name, "Content-Type") == 0) {
         req->content_type = strdup(value);
+      } else if (strcmp(header_name, "Content-Length") == 0) {
+        req->content_length = atoi(value);
       }
     }
 

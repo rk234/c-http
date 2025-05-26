@@ -36,8 +36,14 @@ int handle_conn(int client_socket_fd, struct sockaddr_in *client_addr) {
     printf("\t[handler]: uri: %s\n", req.uri);
     printf("\t[handler]: host: %s\n", req.host);
 
+    if (req.content_type != NULL) {
+      printf("\t[handler]: content-type: %s\n", req.content_type);
+    }
+    if (req.content_type != NULL) {
+      printf("\t[handler]: content-length: %d\n", req.content_length);
+    }
     if (req.body != NULL) {
-      printf("\t[handler]: body:\n%s\n", req.body);
+      printf("\t[handler]: body:%s\n", req.body);
     }
 
     free_http_request(&req);

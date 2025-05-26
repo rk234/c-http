@@ -7,6 +7,7 @@ typedef struct {
   char *host;
   char *user_agent;
   char *content_type;
+  int content_length;
   char *body;
 } http_req_t;
 
