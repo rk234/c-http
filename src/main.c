@@ -1,4 +1,6 @@
 #include "conn_handler.h"
+#include "request.h"
+#include "response.h"
 #include "server.h"
 #include <bits/getopt_core.h>
 #include <bits/pthreadtypes.h>
@@ -12,9 +14,9 @@
 #include <unistd.h>
 
 int should_exit = 0;
-int socket_fd = -1;
+http_server_t server = {0};
 
-void cleanup() { close(socket_fd); }
+void cleanup() { server_cleanup(&server); }
 
 void exit_handler(int signo) {
   printf("exiting gracefully...\n");
@@ -32,6 +34,33 @@ void child_handler(int signo) {
   }
 }
 
+int hello_handler(http_req_t *req, http_resp_t *resp) {
+  resp->body = ("<p>This request was handled by the hello handler!</p>");
+  resp->content_type = "text/html";
+  resp->status = 200;
+  resp->max_age = 3600;
+  return 0;
+}
+
+int foo_handler(http_req_t *req, http_resp_t *resp) {
+  resp->body = ("<p>This request was handled by the foo handler!</p>");
+  resp->content_type = "text/html";
+  resp->status = 200;
+  resp->max_age = 3600;
+  return 0;
+}
+
+int index_handler(http_req_t *req, http_resp_t *resp) {
+  resp->body = "<h1>Hello World!</h1>\n"
+               "<p>This page is being served by c-http!</p>\n"
+               "<a href='/hello'>Go to another page</a>\n"
+               "<a href='/foo'>Or another one</a>\n";
+  resp->content_type = "text/html";
+  resp->status = 200;
+  resp->max_age = 3600;
+  return 0;
+}
+
 int main(int argc, char *argv[]) {
   printf("pid: %d\n", getpid());
 
@@ -47,20 +76,24 @@ int main(int argc, char *argv[]) {
     printf("failed to set SIGCHLD handler!\n");
   }
 
-  if ((socket_fd = server_create_socket(INADDR_ANY, 8080)) == -1) {
-    printf("Exiting...\n");
+  if (server_create(&server, INADDR_ANY, 8080) == -1) {
+    printf("exiting...\n");
 
     return -1;
   }
 
-  server_listen_socket(socket_fd);
+  server_add_handler(&server, "/", index_handler);
+  server_add_handler(&server, "/hello", hello_handler);
+  server_add_handler(&server, "/foo", foo_handler);
+
+  server_listen_socket(&server);
 
   while (!should_exit) {
     struct sockaddr client_addr = {0};
     socklen_t client_addr_len = 0;
 
     int client_socket_fd = -1;
-    if ((client_socket_fd = server_accept_conn(socket_fd, &client_addr,
+    if ((client_socket_fd = server_accept_conn(&server, &client_addr,
                                                &client_addr_len)) != -1) {
       printf("Connection accepted!\n");
 
@@ -68,10 +101,10 @@ int main(int argc, char *argv[]) {
 
       if (pid == 0) {
         // child
-        close(socket_fd);
+        close(server.sock_fd);
 
-        if (handle_conn(client_socket_fd, (struct sockaddr_in *)&client_addr) !=
-            0) {
+        if (handle_conn(&server, client_socket_fd,
+                        (struct sockaddr_in *)&client_addr) != 0) {
           close(client_socket_fd);
           printf("[handler]: exited with error!\n");
           return -1;
