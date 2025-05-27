@@ -5,8 +5,9 @@ typedef struct {
   int status;
   char *content_type;
   char *body;
+  int max_age;
 } http_resp_t;
 
-int create_http_response(http_resp_t resp, char *buf, int buf_size);
+char *create_http_response_msg(http_resp_t res, int *buf_size);
 
 #endif // !RESPONSE_H

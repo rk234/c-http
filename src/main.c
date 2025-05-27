@@ -25,8 +25,10 @@ void exit_handler(int signo) {
 
 void child_handler(int signo) {
   int pid;
-  if ((pid = wait(NULL)) != -1) {
-    printf("[child_hanlder]: child (%d) exited!\n", pid);
+  int status;
+  if ((pid = wait(&status)) != -1) {
+    printf("[child_hanlder]: child (%d) exited! status: %d\n", pid,
+           WEXITSTATUS(status));
   }
 }
 

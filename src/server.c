@@ -20,6 +20,11 @@ int server_create_socket(in_addr_t ip, uint16_t port) {
                              .sin_port = htons(port),
                              .sin_addr.s_addr = htonl(ip)};
 
+  int yes = 1;
+  if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) != 0) {
+    perror("failed to set SO_REUSEADDR");
+  }
+
   if (bind(sockfd, (struct sockaddr *)&addr, sizeof(addr)) != 0) {
     close(sockfd);
     perror("failed to bind");
