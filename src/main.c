@@ -82,9 +82,9 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  server_add_handler(&server, "/", index_handler);
-  server_add_handler(&server, "/hello", hello_handler);
-  server_add_handler(&server, "/foo", foo_handler);
+  server_add_handler(&server, "GET", "/", index_handler);
+  server_add_handler(&server, "GET", "/hello", hello_handler);
+  server_add_handler(&server, "GET", "/foo", foo_handler);
 
   server_listen_socket(&server);
 

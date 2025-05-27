@@ -57,7 +57,7 @@ int handle_conn(http_server_t *server, int client_socket_fd,
 
     char *resp = NULL;
 
-    route_handler_fn handler = server_get_handler(server, req.uri);
+    route_handler_fn handler = server_get_handler(server, req.method, req.uri);
     if (handler != NULL) {
       printf("[handler]: found handler for uri (%s)!\n", req.uri);
       http_resp_t res = {0};

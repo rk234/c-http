@@ -1,5 +1,4 @@
 #include "server.h"
-#include "conn_handler.h"
 #include <arpa/inet.h>
 #include <asm-generic/socket.h>
 #include <stdio.h>
@@ -61,14 +60,15 @@ int server_accept_conn(http_server_t *server, struct sockaddr *client_addr,
   return fd;
 }
 
-int server_add_handler(http_server_t *server, const char *route,
-                       route_handler_fn handler) {
+int server_add_handler(http_server_t *server, const char *method,
+                       const char *route, route_handler_fn handler) {
   route_handler_node_t *new_node = malloc(sizeof(route_handler_node_t));
 
   if (new_node == NULL)
     return -1;
 
   new_node->handler = handler;
+  new_node->method = method;
   new_node->route = strdup(route);
   new_node->next = NULL;
 
@@ -87,13 +87,14 @@ int server_add_handler(http_server_t *server, const char *route,
   return 0;
 }
 
-route_handler_fn server_get_handler(http_server_t *server, const char *route) {
+route_handler_fn server_get_handler(http_server_t *server, const char *method,
+                                    const char *route) {
   if (server->route_handlers == NULL)
     return NULL;
 
   for (route_handler_node_t *node = server->route_handlers; node != NULL;
        node = node->next) {
-    if (strcmp(node->route, route) == 0)
+    if (strcmp(node->route, route) == 0 && strcmp(node->method, method) == 0)
       return node->handler;
   }
 
