@@ -51,8 +51,6 @@ int handle_conn(http_server_t *server, int client_socket_fd,
       printf("\t[handler]: body:%s\n", req.body);
     }
 
-    printf("here before\n");
-
     int resp_size = 0;
 
     char *resp = NULL;
