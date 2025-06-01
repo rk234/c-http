@@ -3,9 +3,7 @@
 #include "response.h"
 #include "server.h"
 #include <bits/getopt_core.h>
-#include <bits/pthreadtypes.h>
 #include <netinet/in.h>
-#include <pthread.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
