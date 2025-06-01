@@ -6,7 +6,7 @@ _May not be fully standards compliant! This is mainly meant as a learning exerci
 
 ## Registering route handlers
 
-C-HTTP supports registering custom route handlers like follows:
+C-HTTP supports registering custom route handlers as follows:
 
 ```c
 server_add_handler(&server, "GET", "/", index_handler);

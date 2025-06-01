@@ -28,7 +28,7 @@ $(BUILD_DIR)/response.o: $(SRC_DIR)/response.c $(SRC_DIR)/response.h
 	$(CC) $(FLAGS) -c $(SRC_DIR)/response.c -o $(BUILD_DIR)/response.o
 
 setup:
-	mkdir $(BUILD_DIR) $(OUT_DIR)
+	mkdir -p $(BUILD_DIR) $(OUT_DIR)
 
 clean:
 	rm $(BUILD_DIR)/* $(OUT_DIR)/*

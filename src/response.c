@@ -12,7 +12,6 @@ static const char *template = "HTTP/1.1 %d %s\r\n"
                               "%s";
 
 char *create_http_response_msg(http_resp_t res, int *buf_size) {
-  printf("here!\n");
   char dateBuf[512] = {0};
   time_t now = time(0);
   struct tm tm = *gmtime(&now);
