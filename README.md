@@ -26,7 +26,7 @@ $ make setup
 $ make
 ```
 
-The compiled binary will be located at `./dist/server`.
+The compiled binary will be located at `dist/chttp`.
 
 ## TODO
 
